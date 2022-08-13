@@ -22,12 +22,21 @@ pub use ::core::include_bytes as include_u8;
 ///
 /// Will throw a compiler error if the included file will not fit into a
 /// `&[T]` slice. That is, if the file size is not divisible by
-/// `size_of::<T>()`.
+/// `size_of::<T>()`. Since all bit patterns are valid for all integer types,
+/// this macro is always safe due to this size check.
 ///
 /// Uses [`std::include_bytes`](std::include_bytes) and therefore has the same
 /// portability limitations on the path.
 ///
 /// [incb]: std::include_bytes
+///
+/// # Example
+///
+/// ```rust
+/// use include_data::include_ints;
+///
+/// static DATA_U32: &[u32] = include_ints!(u32, "../tests/test_data/binary_32");
+/// ```
 #[macro_export]
 macro_rules! include_ints {
     ($int_ty:ty, $file:expr $(,)?) => {{
@@ -135,10 +144,19 @@ macro_rules! include_i128 {
 ///
 /// Will throw a compiler error if the included file will not fit into a
 /// `&[T]` slice. That is, if the file size is not divisible by
-/// `size_of::<T>()`.
+/// `size_of::<T>()`. Since all bit patterns are valid for all floating point
+/// types, this macro is always safe due to this size check.
 ///
 /// Uses `std::include_bytes` and therefore has the same portability limitations
 /// on the path.
+///
+/// # Example
+///
+/// ```rust
+/// use include_data::include_floats;
+///
+/// static DATA_F64: &[f64] = include_floats!(f64, "../tests/test_data/binary_64");
+/// ```
 #[macro_export]
 macro_rules! include_floats {
     ($float_ty:ty, $file:expr $(,)?) => {{
