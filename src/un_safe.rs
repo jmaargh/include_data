@@ -1,9 +1,10 @@
 //! Macros in this module are all `unsafe` and require `unsafe` blocks.
 
-/// Unsafe. Includes a file as a static reference to any given sized type.
+/// Unsafe. Includes a file as a static reference to any given `: Sized` type.
 ///
-/// The return type is `&'static T`, where `T` is inferred. The binary
-/// representation of the included `T` value is taken from the specified file.
+/// The return type is `&'static T`, where `T` is inferred but must be `:Sized`.
+/// The binary representation of the included `T` value is taken from the
+/// specified file.
 ///
 /// Uses [`std::include_bytes`](std::include_bytes) and therefore has the same
 /// portability limitations on the path.
