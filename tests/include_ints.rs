@@ -24,6 +24,7 @@ fn include_u16() {
         assert_eq!(BYTES_32[i], i2 + ((i2 + 1) << 8));
     }
 
+    assert_eq!(BYTES_32.as_ptr().align_offset(2), 0);
     assert_eq!(BYTES_64.len(), 32);
 }
 
