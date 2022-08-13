@@ -1,6 +1,6 @@
 #![allow(clippy::modulo_one)]
 
-use include_data::include_ints;
+use include_data::{include_ints, include_u16};
 
 #[test]
 fn include_bytes() {
@@ -15,6 +15,7 @@ fn include_bytes() {
 #[test]
 fn include_u16() {
     static BYTES_32: &[u16] = include_ints!(u16, "test_data/binary_32");
+    static BYTES_64: &[u16] = include_u16!("test_data/binary_64");
 
     assert_eq!(BYTES_32.as_ptr().align_offset(2), 0);
     assert_eq!(BYTES_32.len(), 16);
@@ -22,6 +23,8 @@ fn include_u16() {
         let i2 = (i as u16) * 2;
         assert_eq!(BYTES_32[i], i2 + ((i2 + 1) << 8));
     }
+
+    assert_eq!(BYTES_64.len(), 32);
 }
 
 #[test]

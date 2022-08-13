@@ -8,6 +8,9 @@
 //! For slices, requires beta or nightly until [this issue](https://github.com/rust-lang/rust/issues/67456)
 //! is stabilised.
 
+/// Simple re-export of `include_bytes`
+pub use ::core::include_bytes as include_u8;
+
 /// Includes a file as a static reference to a slice of any primitive integers.
 ///
 /// For any primitive integer type `T`, `include_ints(T, path)` will return
@@ -44,6 +47,69 @@ macro_rules! include_ints {
 
         out_slice
     }};
+}
+
+#[macro_export]
+macro_rules! include_u16 {
+    ($path:literal $(,)?) => {
+        include_ints!(u16, $path)
+    };
+}
+
+#[macro_export]
+macro_rules! include_u32 {
+    ($path:literal $(,)?) => {
+        include_ints!(u32, $path)
+    };
+}
+
+#[macro_export]
+macro_rules! include_u64 {
+    ($path:literal $(,)?) => {
+        include_ints!(u64, $path)
+    };
+}
+
+#[macro_export]
+macro_rules! include_u128 {
+    ($path:literal $(,)?) => {
+        include_ints!(u128, $path)
+    };
+}
+
+#[macro_export]
+macro_rules! include_i8 {
+    ($path:literal $(,)?) => {
+        include_ints!(i8, $path)
+    };
+}
+
+#[macro_export]
+macro_rules! include_i16 {
+    ($path:literal $(,)?) => {
+        include_ints!(i16, $path)
+    };
+}
+
+#[macro_export]
+macro_rules! include_i32 {
+    ($path:literal $(,)?) => {
+        include_ints!(i32, $path)
+    };
+}
+
+#[macro_export]
+macro_rules! include_i64 {
+    ($path:literal $(,)?) => {
+        include_ints!(i64, $path)
+    };
+}
+
+#[macro_export]
+macro_rules! include_i128 {
+    ($path:literal $(,)?) => {
+        include_ints!(i128, $path)
+    };
 }
 
 /// Force alignment of the `bytes` member to match that of type T.
