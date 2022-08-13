@@ -14,6 +14,8 @@
 /// Simple re-export of `include_bytes`
 pub use ::core::include_bytes as include_u8;
 
+pub mod un_safe;
+
 /// Includes a file as a static reference to a slice of any primitive integers.
 ///
 /// For any primitive integer type `T`, `include_ints(T, path)` will return
