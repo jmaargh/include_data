@@ -30,12 +30,12 @@ pub use ::core::include_bytes as include_u8;
 /// [incb]: std::include_bytes
 #[macro_export]
 macro_rules! include_ints {
-    ($int_ty:ty, $path:expr $(,)?) => {{
+    ($int_ty:ty, $file:expr $(,)?) => {{
         const INT_SIZE: usize = ::core::mem::size_of::<$int_ty>();
 
         static ALIGNED: &$crate::AlignedAs<$int_ty, [u8]> = &$crate::AlignedAs {
             _align: [],
-            bytes: *include_bytes!($path),
+            bytes: *include_bytes!($file),
         };
 
         let byte_slice: &[u8] = &ALIGNED.bytes;
@@ -57,72 +57,72 @@ macro_rules! include_ints {
 /// Alias of [`include_ints(u16, path)`](include_ints). Returns a `&'static [u16]`.
 #[macro_export]
 macro_rules! include_u16 {
-    ($path:expr $(,)?) => {
-        include_ints!(u16, $path)
+    ($file:expr $(,)?) => {
+        include_ints!(u16, $file)
     };
 }
 
 /// Alias of [`include_ints(u32, path)`](include_ints). Returns a `&'static [u32]`.
 #[macro_export]
 macro_rules! include_u32 {
-    ($path:expr $(,)?) => {
-        include_ints!(u32, $path)
+    ($file:expr $(,)?) => {
+        include_ints!(u32, $file)
     };
 }
 
 /// Alias of [`include_ints(u64, path)`](include_ints). Returns a `&'static [u64]`.
 #[macro_export]
 macro_rules! include_u64 {
-    ($path:expr $(,)?) => {
-        include_ints!(u64, $path)
+    ($file:expr $(,)?) => {
+        include_ints!(u64, $file)
     };
 }
 
 /// Alias of [`include_ints(u128, path)`](include_ints). Returns a `&'static [u128]`.
 #[macro_export]
 macro_rules! include_u128 {
-    ($path:expr $(,)?) => {
-        include_ints!(u128, $path)
+    ($file:expr $(,)?) => {
+        include_ints!(u128, $file)
     };
 }
 
 /// Alias of [`include_ints(i8, path)`](include_ints). Returns a `&'static [i8]`.
 #[macro_export]
 macro_rules! include_i8 {
-    ($path:expr $(,)?) => {
-        include_ints!(i8, $path)
+    ($file:expr $(,)?) => {
+        include_ints!(i8, $file)
     };
 }
 
 /// Alias of [`include_ints(i16, path)`](include_ints). Returns a `&'static [i16]`.
 #[macro_export]
 macro_rules! include_i16 {
-    ($path:expr $(,)?) => {
-        include_ints!(i16, $path)
+    ($file:expr $(,)?) => {
+        include_ints!(i16, $file)
     };
 }
 
 /// Alias of [`include_ints(i32, path)`](include_ints). Returns a `&'static [i32]`.
 #[macro_export]
 macro_rules! include_i32 {
-    ($path:expr $(,)?) => {
-        include_ints!(i32, $path)
+    ($file:expr $(,)?) => {
+        include_ints!(i32, $file)
     };
 }
 
 /// Alias of [`include_ints(i64, path)`](include_ints). Returns a `&'static [i64]`.
 #[macro_export]
 macro_rules! include_i64 {
-    ($path:expr $(,)?) => {
-        include_ints!(i64, $path)
+    ($file:expr $(,)?) => {
+        include_ints!(i64, $file)
     };
 }
 
 /// Alias of [`include_ints(i128, path)`](include_ints). Returns a `&'static [i128]`.
 #[macro_export]
 macro_rules! include_i128 {
-    ($path:expr $(,)?) => {
-        include_ints!(i128, $path)
+    ($file:expr $(,)?) => {
+        include_ints!(i128, $file)
     };
 }
 
@@ -141,12 +141,12 @@ macro_rules! include_i128 {
 /// on the path.
 #[macro_export]
 macro_rules! include_floats {
-    ($float_ty:ty, $path:expr $(,)?) => {{
+    ($float_ty:ty, $file:expr $(,)?) => {{
         const FLOAT_SIZE: usize = ::core::mem::size_of::<$float_ty>();
 
         static ALIGNED: &$crate::AlignedAs<$float_ty, [u8]> = &$crate::AlignedAs {
             _align: [],
-            bytes: *include_bytes!($path),
+            bytes: *include_bytes!($file),
         };
 
         let byte_slice: &[u8] = &ALIGNED.bytes;
@@ -168,16 +168,16 @@ macro_rules! include_floats {
 /// Alias of [`include_floats(f32, path)`](include_floats)
 #[macro_export]
 macro_rules! include_f32 {
-    ($path:expr $(,)?) => {
-        include_floats!(f32, $path)
+    ($file:expr $(,)?) => {
+        include_floats!(f32, $file)
     };
 }
 
 /// Alias of [`include_floats(f64, path)`](include_floats)
 #[macro_export]
 macro_rules! include_f64 {
-    ($path:expr $(,)?) => {
-        include_foats!(f64, $path)
+    ($file:expr $(,)?) => {
+        include_foats!(f64, $file)
     };
 }
 
