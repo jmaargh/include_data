@@ -1,0 +1,18 @@
+error: couldn't read $DIR/tests/bad/include_ints/../../test_data/non-existent: No such file or directory (os error 2)
+ --> tests/bad/include_ints/missing_file.rs:6:27
+  |
+6 | static BYTES_31: &[i32] = include_ints!(i32, "../../test_data/non-existent");
+  |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the macro `include_bytes` which comes from the expansion of the macro `include_ints` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the size for values of type `[u8]` cannot be known at compilation time
+ --> tests/bad/include_ints/missing_file.rs:6:27
+  |
+6 | static BYTES_31: &[i32] = include_ints!(i32, "../../test_data/non-existent");
+  |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ doesn't have a size known at compile-time
+  |
+  = help: within `AlignedAs<i32, [u8]>`, the trait `Sized` is not implemented for `[u8]`
+  = note: required because it appears within the type `AlignedAs<i32, [u8]>`
+  = note: structs must have a statically known size to be initialized
+  = note: this error originates in the macro `include_ints` (in Nightly builds, run with -Z macro-backtrace for more info)

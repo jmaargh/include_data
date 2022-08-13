@@ -1,0 +1,7 @@
+error[E0080]: could not evaluate static initializer
+ --> tests/bad/include_ints/u16_data32.rs:6:27
+  |
+6 | static BYTES_31: &[u16] = include_ints!(u16, "../../test_data/binary_31");
+  |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the evaluated program panicked at 'Included file size is not divisible by int size', $DIR/tests/bad/include_ints/u16_data32.rs:6:27
+  |
+  = note: this error originates in the macro `$crate::panic::panic_2021` which comes from the expansion of the macro `include_ints` (in Nightly builds, run with -Z macro-backtrace for more info)

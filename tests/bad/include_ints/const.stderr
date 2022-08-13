@@ -1,0 +1,8 @@
+error[E0013]: constants cannot refer to statics
+ --> tests/bad/include_ints/const.rs:6:31
+  |
+6 | const BYTES_32_const: &[u8] = include_ints!(u8, "../../test_data/binary_32");
+  |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = help: consider extracting the value of the `static` to a `const`, and referring to that
+  = note: this error originates in the macro `include_ints` (in Nightly builds, run with -Z macro-backtrace for more info)
