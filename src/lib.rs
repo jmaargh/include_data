@@ -27,6 +27,10 @@ pub mod un_safe;
 /// `size_of::<T>()`. Since all bit patterns are valid for all integer types,
 /// this macro is always safe due to this size check.
 ///
+/// For any types other than `u8` or `i8`, the interpretation of the file will
+/// depend on endianness. This macro simply casts a pointer to `[u8]` to a
+/// pointer to `[$int_ty]`.
+///
 /// Uses [`std::include_bytes`](std::include_bytes) and therefore has the same
 /// portability limitations on the path.
 ///
@@ -148,6 +152,9 @@ macro_rules! include_i128 {
 /// `&[T]` slice. That is, if the file size is not divisible by
 /// `size_of::<T>()`. Since all bit patterns are valid for all floating point
 /// types, this macro is always safe due to this size check.
+///
+/// The interpretation of the file will depend on endianness. This macro simply
+/// casts a pointer to `[u8]` to a pointer to `[$float_ty]`.
 ///
 /// Uses `std::include_bytes` and therefore has the same portability limitations
 /// on the path.
