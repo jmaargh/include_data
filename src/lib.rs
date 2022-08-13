@@ -30,7 +30,7 @@ pub use ::core::include_bytes as include_u8;
 /// [incb]: std::include_bytes
 #[macro_export]
 macro_rules! include_ints {
-    ($int_ty:ty, $path:literal $(,)?) => {{
+    ($int_ty:ty, $path:expr $(,)?) => {{
         const INT_SIZE: usize = ::core::mem::size_of::<$int_ty>();
 
         static ALIGNED: &$crate::AlignedAs<$int_ty, [u8]> = &$crate::AlignedAs {
@@ -57,7 +57,7 @@ macro_rules! include_ints {
 /// Alias of [`include_ints(u16, path)`](include_ints). Returns a `&'static [u16]`.
 #[macro_export]
 macro_rules! include_u16 {
-    ($path:literal $(,)?) => {
+    ($path:expr $(,)?) => {
         include_ints!(u16, $path)
     };
 }
@@ -65,7 +65,7 @@ macro_rules! include_u16 {
 /// Alias of [`include_ints(u32, path)`](include_ints). Returns a `&'static [u32]`.
 #[macro_export]
 macro_rules! include_u32 {
-    ($path:literal $(,)?) => {
+    ($path:expr $(,)?) => {
         include_ints!(u32, $path)
     };
 }
@@ -73,7 +73,7 @@ macro_rules! include_u32 {
 /// Alias of [`include_ints(u64, path)`](include_ints). Returns a `&'static [u64]`.
 #[macro_export]
 macro_rules! include_u64 {
-    ($path:literal $(,)?) => {
+    ($path:expr $(,)?) => {
         include_ints!(u64, $path)
     };
 }
@@ -81,7 +81,7 @@ macro_rules! include_u64 {
 /// Alias of [`include_ints(u128, path)`](include_ints). Returns a `&'static [u128]`.
 #[macro_export]
 macro_rules! include_u128 {
-    ($path:literal $(,)?) => {
+    ($path:expr $(,)?) => {
         include_ints!(u128, $path)
     };
 }
@@ -89,7 +89,7 @@ macro_rules! include_u128 {
 /// Alias of [`include_ints(i8, path)`](include_ints). Returns a `&'static [i8]`.
 #[macro_export]
 macro_rules! include_i8 {
-    ($path:literal $(,)?) => {
+    ($path:expr $(,)?) => {
         include_ints!(i8, $path)
     };
 }
@@ -97,7 +97,7 @@ macro_rules! include_i8 {
 /// Alias of [`include_ints(i16, path)`](include_ints). Returns a `&'static [i16]`.
 #[macro_export]
 macro_rules! include_i16 {
-    ($path:literal $(,)?) => {
+    ($path:expr $(,)?) => {
         include_ints!(i16, $path)
     };
 }
@@ -105,7 +105,7 @@ macro_rules! include_i16 {
 /// Alias of [`include_ints(i32, path)`](include_ints). Returns a `&'static [i32]`.
 #[macro_export]
 macro_rules! include_i32 {
-    ($path:literal $(,)?) => {
+    ($path:expr $(,)?) => {
         include_ints!(i32, $path)
     };
 }
@@ -113,7 +113,7 @@ macro_rules! include_i32 {
 /// Alias of [`include_ints(i64, path)`](include_ints). Returns a `&'static [i64]`.
 #[macro_export]
 macro_rules! include_i64 {
-    ($path:literal $(,)?) => {
+    ($path:expr $(,)?) => {
         include_ints!(i64, $path)
     };
 }
@@ -121,7 +121,7 @@ macro_rules! include_i64 {
 /// Alias of [`include_ints(i128, path)`](include_ints). Returns a `&'static [i128]`.
 #[macro_export]
 macro_rules! include_i128 {
-    ($path:literal $(,)?) => {
+    ($path:expr $(,)?) => {
         include_ints!(i128, $path)
     };
 }
@@ -141,7 +141,7 @@ macro_rules! include_i128 {
 /// on the path.
 #[macro_export]
 macro_rules! include_floats {
-    ($float_ty:ty, $path:literal $(,)?) => {{
+    ($float_ty:ty, $path:expr $(,)?) => {{
         const FLOAT_SIZE: usize = ::core::mem::size_of::<$float_ty>();
 
         static ALIGNED: &$crate::AlignedAs<$float_ty, [u8]> = &$crate::AlignedAs {
@@ -168,7 +168,7 @@ macro_rules! include_floats {
 /// Alias of [`include_floats(f32, path)`](include_floats)
 #[macro_export]
 macro_rules! include_f32 {
-    ($path:literal $(,)?) => {
+    ($path:expr $(,)?) => {
         include_floats!(f32, $path)
     };
 }
@@ -176,7 +176,7 @@ macro_rules! include_f32 {
 /// Alias of [`include_floats(f64, path)`](include_floats)
 #[macro_export]
 macro_rules! include_f64 {
-    ($path:literal $(,)?) => {
+    ($path:expr $(,)?) => {
         include_foats!(f64, $path)
     };
 }
