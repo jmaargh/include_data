@@ -50,7 +50,7 @@ macro_rules! include_ints {
 
         static ALIGNED: &$crate::AlignedAs<$int_ty, [u8]> = &$crate::AlignedAs {
             _align: [],
-            bytes: *include_bytes!($file),
+            bytes: *::core::include_bytes!($file),
         };
 
         let byte_slice: &[u8] = &ALIGNED.bytes;
@@ -73,7 +73,7 @@ macro_rules! include_ints {
 #[macro_export]
 macro_rules! include_u16 {
     ($file:expr $(,)?) => {
-        include_ints!(u16, $file)
+        $crate::include_ints!(u16, $file)
     };
 }
 
@@ -81,7 +81,7 @@ macro_rules! include_u16 {
 #[macro_export]
 macro_rules! include_u32 {
     ($file:expr $(,)?) => {
-        include_ints!(u32, $file)
+        $crate::include_ints!(u32, $file)
     };
 }
 
@@ -89,7 +89,7 @@ macro_rules! include_u32 {
 #[macro_export]
 macro_rules! include_u64 {
     ($file:expr $(,)?) => {
-        include_ints!(u64, $file)
+        $crate::include_ints!(u64, $file)
     };
 }
 
@@ -97,7 +97,7 @@ macro_rules! include_u64 {
 #[macro_export]
 macro_rules! include_u128 {
     ($file:expr $(,)?) => {
-        include_ints!(u128, $file)
+        $crate::include_ints!(u128, $file)
     };
 }
 
@@ -105,7 +105,7 @@ macro_rules! include_u128 {
 #[macro_export]
 macro_rules! include_i8 {
     ($file:expr $(,)?) => {
-        include_ints!(i8, $file)
+        $crate::include_ints!(i8, $file)
     };
 }
 
@@ -113,7 +113,7 @@ macro_rules! include_i8 {
 #[macro_export]
 macro_rules! include_i16 {
     ($file:expr $(,)?) => {
-        include_ints!(i16, $file)
+        $crate::include_ints!(i16, $file)
     };
 }
 
@@ -121,7 +121,7 @@ macro_rules! include_i16 {
 #[macro_export]
 macro_rules! include_i32 {
     ($file:expr $(,)?) => {
-        include_ints!(i32, $file)
+        $crate::include_ints!(i32, $file)
     };
 }
 
@@ -129,7 +129,7 @@ macro_rules! include_i32 {
 #[macro_export]
 macro_rules! include_i64 {
     ($file:expr $(,)?) => {
-        include_ints!(i64, $file)
+        $crate::include_ints!(i64, $file)
     };
 }
 
@@ -137,7 +137,7 @@ macro_rules! include_i64 {
 #[macro_export]
 macro_rules! include_i128 {
     ($file:expr $(,)?) => {
-        include_ints!(i128, $file)
+        $crate::include_ints!(i128, $file)
     };
 }
 
@@ -173,7 +173,7 @@ macro_rules! include_floats {
 
         static ALIGNED: &$crate::AlignedAs<$float_ty, [u8]> = &$crate::AlignedAs {
             _align: [],
-            bytes: *include_bytes!($file),
+            bytes: *::core::include_bytes!($file),
         };
 
         let byte_slice: &[u8] = &ALIGNED.bytes;
@@ -196,7 +196,7 @@ macro_rules! include_floats {
 #[macro_export]
 macro_rules! include_f32 {
     ($file:expr $(,)?) => {
-        include_floats!(f32, $file)
+        $crate::include_floats!(f32, $file)
     };
 }
 
@@ -204,7 +204,7 @@ macro_rules! include_f32 {
 #[macro_export]
 macro_rules! include_f64 {
     ($file:expr $(,)?) => {
-        include_foats!(f64, $file)
+        $crate::include_floats!(f64, $file)
     };
 }
 

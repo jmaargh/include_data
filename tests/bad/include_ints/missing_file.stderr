@@ -4,7 +4,7 @@ error: couldn't read $DIR/tests/bad/include_ints/../../test_data/non-existent: N
 6 | static BYTES_31: &[i32] = include_ints!(i32, "../../test_data/non-existent");
   |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   |
-  = note: this error originates in the macro `include_bytes` which comes from the expansion of the macro `include_ints` (in Nightly builds, run with -Z macro-backtrace for more info)
+  = note: this error originates in the macro `::core::include_bytes` which comes from the expansion of the macro `include_ints` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the size for values of type `[u8]` cannot be known at compilation time
  --> tests/bad/include_ints/missing_file.rs:6:27

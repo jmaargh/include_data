@@ -76,3 +76,13 @@ fn bad_use() {
     let t = trybuild::TestCases::new();
     t.compile_fail("tests/bad/include_ints/*.rs");
 }
+
+mod noincs {
+    #[test]
+    fn no_include_i32() {
+        static INTS: &[i32] = include_data::include_i32!("test_data/binary_32");
+
+        assert_eq!(INTS.as_ptr().align_offset(4), 0);
+        assert_eq!(INTS.len(), 8);
+    }
+}
