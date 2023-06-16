@@ -5,9 +5,6 @@
 //! - transmute version does not work for slices because it requires a reference
 //!   to a signed type
 //!
-//! For slices, requires beta or nightly until [this issue](https://github.com/rust-lang/rust/issues/67456)
-//! is stabilised.
-//!
 //! Is safe because will only construct aligned and properly sized slices for
 //! types that are valid for all bit patterns.
 
@@ -33,8 +30,6 @@ pub mod un_safe;
 ///
 /// Uses [`std::include_bytes`](std::include_bytes) and therefore has the same
 /// portability limitations on the path.
-///
-/// [incb]: std::include_bytes
 ///
 /// # Example
 ///

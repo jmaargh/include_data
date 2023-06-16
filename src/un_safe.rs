@@ -2,7 +2,7 @@
 
 /// Unsafe. Includes a file as a static reference to any given `: Sized` type.
 ///
-/// The return type is `&'static T`, where `T` is inferred but must be `:Sized`.
+/// The return type is `&'static T`, where `T` is inferred but must be `Sized`.
 /// The binary representation of the included `T` value is taken from the
 /// specified file.
 ///
@@ -23,9 +23,8 @@
 /// most target types (certainly structs and enums) should be marked
 /// `#[repr(C)]` so the bit representation is guaranteed.
 ///
-/// Alignment is not an issue, as this macro
-///
-/// [incb]: std::include_bytes
+/// This macro does, however, ensure that the data is properly aligned for the
+/// target type.
 ///
 /// # Example
 ///
