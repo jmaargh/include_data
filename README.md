@@ -47,8 +47,10 @@ includes. This is provided by two main macros:
  ```rust
  static MY_INTEGER: i32 = include_data!("../tests/test_data/file_exactly_4_bytes_long");
  static SOME_TEXT: &[u32] = include_slice!(u32, "../tests/test_data/some_utf-32_file");
- static FOUR_BYTES: [u8; 4] = include_data!("../tests/test_data/file_exactly_4_bytes_long");
+ const FOUR_BYTES: [u8; 4] = include_data!("../tests/test_data/file_exactly_4_bytes_long");
  ```
+
+ Note that `include_data` can assign to `const`, while `include_slice` cannot.
 
  Aliases are provided for `include_slice` for primitive number types, using
  them is a matter of personal preference. For example:
@@ -106,8 +108,10 @@ includes. This is provided by two main macros:
  it, in the case of slices) or the file cannot be read, compilation will
  fail.
 
- `include_unsafe` is **very** unsafe and should be used with great care.
- See the linked documentation for full details.
+ `include_unsafe` is **very** unsafe and should only be used with great care.
+ See the
+ [documentation](https://docs.rs/include_data/latest/include_data/macro.include_unsafe.html)
+ for full details.
 
  ## MSRV
 
