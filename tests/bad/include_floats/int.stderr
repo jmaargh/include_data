@@ -1,9 +1,0 @@
-error[E0308]: mismatched types
- --> tests/bad/include_floats/int.rs:6:23
-  |
-6 | static INTS: &[u32] = include_f32!("../../test_data/binary_64");
-  |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `&[u32]`, found `&[f32]`
-  |
-  = note: expected reference `&'static [u32]`
-             found reference `&'static [f32]`
-  = note: this error originates in the macro `$crate::include_floats` which comes from the expansion of the macro `include_f32` (in Nightly builds, run with -Z macro-backtrace for more info)

@@ -1,9 +1,0 @@
-error[E0308]: mismatched types
- --> tests/bad/include_ints/u8_u16.rs:6:33
-  |
-6 | static BYTES_32_u8_u16: &[u8] = include_ints!(u16, "../../test_data/binary_32");
-  |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `&[u8]`, found `&[u16]`
-  |
-  = note: expected reference `&'static [u8]`
-             found reference `&'static [u16]`
-  = note: this error originates in the macro `include_ints` (in Nightly builds, run with -Z macro-backtrace for more info)

@@ -2,6 +2,12 @@
 name = "include_data"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+license-file = "LICENSE.MIT"
+
+[dependencies.bytemuck]
+version = "1"
+features = ["min_const_generics", "wasm_simd", "aarch64_simd"]
 
 [dev-dependencies]
 trybuild = "1"

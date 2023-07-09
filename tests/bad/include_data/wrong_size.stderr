@@ -1,0 +1,9 @@
+error[E0512]: cannot transmute between types of different sizes, or dependently-sized types
+ --> tests/bad/include_data/wrong_size.rs:3:31
+  |
+3 | static TOO_SHORT: [u16; 30] = include_data::include_data!("../../test_data/binary_64");
+  |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: source type: `[u8; 64]` (512 bits)
+  = note: target type: `[u16; 30]` (480 bits)
+  = note: this error originates in the macro `include_data::include_data` (in Nightly builds, run with -Z macro-backtrace for more info)

@@ -1,0 +1,7 @@
+error: couldn't read $DIR/tests/bad/include_data/../../test_data/non-existent: No such file or directory (os error 2)
+ --> tests/bad/include_data/missing_file.rs:4:25
+  |
+4 | static BYTES_31: u128 = include_data::include_data!("../../test_data/non-existent");
+  |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the macro `::core::include_bytes` which comes from the expansion of the macro `include_data::include_data` (in Nightly builds, run with -Z macro-backtrace for more info)

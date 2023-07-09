@@ -1,0 +1,9 @@
+error[E0308]: mismatched types
+ --> tests/bad/include_slice/u8_u16.rs:4:33
+  |
+4 | static BYTES_32_u8_u16: &[u8] = include_data::include_slice!(u16, "../../test_data/binary_32");
+  |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `&[u8]`, found `&[u16]`
+  |
+  = note: expected reference `&'static [u8]`
+             found reference `&'static [u16]`
+  = note: this error originates in the macro `include_data::include_slice` (in Nightly builds, run with -Z macro-backtrace for more info)

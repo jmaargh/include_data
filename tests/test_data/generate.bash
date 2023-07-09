@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+
+# This script simply generates the binary test files, consisting of $1
+# bytes incrementing from zero
 
 set -euo pipefail
 

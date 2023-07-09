@@ -1,0 +1,7 @@
+error: couldn't read $DIR/tests/bad/include_slice/../../test_data/non-existent: No such file or directory (os error 2)
+ --> tests/bad/include_slice/missing_file.rs:4:27
+  |
+4 | static BYTES_31: &[i32] = include_data::include_slice!(i32, "../../test_data/non-existent");
+  |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the macro `::core::include_bytes` which comes from the expansion of the macro `include_data::include_slice` (in Nightly builds, run with -Z macro-backtrace for more info)

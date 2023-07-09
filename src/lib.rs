@@ -1,213 +1,345 @@
 #![no_std]
 #![allow(clippy::modulo_one)]
 
-//! Prior art: <https://jack.wrenn.fyi/blog/include-transmute/>
-//! - transmute version does not work for slices because it requires a reference
-//!   to a signed type
+//! # include_data - Include typed data directly in your executable
 //!
-//! Is safe because will only construct aligned and properly sized slices for
-//! types that are valid for all bit patterns.
+//! The primary API is provided by two macros:
+//! - [`include_data`] - include static data as any plain-old-data type
+//! - [`include_slice`] - include static data as `&'static [T]` slice for any
+//!                       plain-old-data `T`
+//!
+//! Soundness of types for this purpose is guaranteed via the
+//! [`Pod`][bytemuck::Pod] trait from the `bytemuck` crate. This trait can be
+//! implemented on any type and so long as that implementation is sound, then
+//! these macros are also sound.
+//!
+//! So for core library types, the following works out of the box:
+//! ```
+//! # use include_data::{include_data, include_slice};
+//! static MY_INTEGER: i32 = include_data!("../tests/test_data/file_exactly_4_bytes_long");
+//! static SOME_TEXT: &[u32] = include_slice!(u32, "../tests/test_data/some_utf-32_file");
+//! const FOUR_BYTES: [u8; 4] = include_data!("../tests/test_data/file_exactly_4_bytes_long");
+//! ```
+//! Note that `include_data` works with `const`, while `include_slice` only
+//! supports `static`.
+//!
+//! For custom types:
+//! ```
+//! # use include_data::include_data;
+//! #[repr(C)]
+//! #[derive(Copy, Clone)]
+//! struct Foo {
+//!     integer: u16,
+//!     pair: (u8, u8),
+//! }
+//!
+//! // Safety: the type `Foo` has been checked to satisfy all requirements of
+//! // `Pod`.
+//! unsafe impl bytemuck::Zeroable for Foo {}
+//! unsafe impl bytemuck::Pod for Foo {}
+//!
+//! static FOO_DATA: Foo = include_data!("../tests/test_data/file_exactly_4_bytes_long");
+//! ```
+//!
+//! If necessary, this crate also provides the [`include_unsafe`] macro,
+//! which is sound if and only if the included file is a valid bit pattern
+//! for the target type, but this is not checked. This should be avoided unless
+//! absolutely necessary, since it is very unsafe and its soundness is fragile
+//! (in some cases, soundness may be broken by a compiler update). See the macro
+//! docs for more details.
+//! ```
+//! # use include_data::include_unsafe;
+//! #[repr(C)]
+//! struct StructWithPadding {
+//!     byte: u8,
+//!     two_bytes: u16,
+//! }
+//!
+//! // Safety: we guarantee that the included file contains bytes which are
+//! // a valid bit-pattern for our struct, when compiled on this host.
+//! static BAR_DATA: StructWithPadding = unsafe { include_unsafe!("../tests/test_data/file_exactly_4_bytes_long") };
+//! ```
 
-/// Simple re-export of `include_bytes`
-pub use ::core::include_bytes as include_u8;
+/// Include data from a file as static data in the executable, of a type that
+/// implements [`bytemuck::Pod`].
+///
+/// Can assign to both `static` and `const` variables.
+///
+/// A compiler error will be thrown if the source file is not the same size as
+/// the target type. The path is interpreted by [`core::include_bytes`] and is
+/// host-platform-specific.
+///
+/// # Example
+/// ```
+/// # use include_data::include_data;
+/// const MY_INTEGER: i32 = include_data!("../tests/test_data/file_exactly_4_bytes_long");
+/// static FOUR_BYTES: [u8; 4] = include_data!("../tests/test_data/file_exactly_4_bytes_long");
+/// ```
+///
+/// # Safety
+///
+/// This macro is safe. However, if used on a custom type, that type must
+/// implement [`bytemuck::Pod`]. Implementing that trait has very struct safety
+/// requirements which must be observed.
+#[macro_export]
+macro_rules! include_data {
+    ($file:expr) => {{
+        const fn typecheck<T: ::bytemuck::Pod>(src: T) -> T {
+            src
+        }
 
-pub mod un_safe;
+        // Safety: transmuting into a `Pod` type is always safe (as all bit
+        // patterns are safe). Alignment of the output type is guaranteed by
+        // `transmute`.
+        typecheck(unsafe { ::core::mem::transmute(*::core::include_bytes!($file)) })
+    }};
+}
 
-/// Includes a file as a static reference to a slice of any primitive integers.
+/// Include data from a file as static data in the executable, without checking
+/// validity.
 ///
-/// For any primitive integer type `T`, `include_ints(T, path)` will return
-/// a `&'static [T]` slice containing the contents of the file at `path`. This
-/// is guaranteed to be properly aligned.
+/// **Warning:** This macro is **very** unsafe. If at all possible, other macros
+/// in this crate should be preferred: even if that makes a runtime conversion
+/// necessary, that is often a good tradeoff rather than maintaining the
+/// soundness of using this macro. See below for full safety requirements.
 ///
-/// Will throw a compiler error if the included file will not fit into a
-/// `&[T]` slice. That is, if the file size is not divisible by
-/// `size_of::<T>()`. Since all bit patterns are valid for all integer types,
-/// this macro is always safe due to this size check.
+/// A compiler error will be thrown if the source file is not the same size as
+/// the target type.
 ///
-/// For any types other than `u8` or `i8`, the interpretation of the file will
-/// depend on endianness. This macro simply casts a pointer to `[u8]` to a
-/// pointer to `[$int_ty]`.
+/// # Example
 ///
-/// Uses [`std::include_bytes`](std::include_bytes) and therefore has the same
-/// portability limitations on the path.
+/// ```
+/// # use include_data::include_unsafe;
+/// #[repr(C)]
+/// struct StructWithPadding {
+///     byte: u8,
+///     two_bytes: u16,
+/// }
+///
+/// // Safety: we guarantee that the included file contains bytes which are
+/// // a valid bit-pattern for our struct, when compiled on this host.
+/// static BAR_DATA: StructWithPadding = unsafe { include_unsafe!("../tests/test_data/file_exactly_4_bytes_long") };
+/// ```
+///
+/// # Safety
+///
+/// If at all possible, consider using another macro from this crate, even if
+/// doing so means performing runtime conversions.
+///
+/// For a use of this macro to be sound, the bytes of the source file must form
+/// a valid bit-pattern for the target type. This macro takes the bytes of the
+/// source file in order and then bitwise converts to the target type. It does
+/// not handle any endianness issues.
+///
+/// In particular, note that Rust does not have a stable ABI. This means that
+/// the compiler is free to lay out non-primitive types however it pleases:
+/// fields will not be in any guaranteed order, there may (or may not) be
+/// padding between fields, etc. The layout of a type may change between
+/// versions of the compiler and between compiler profiles (for example, debug
+/// and release builds could result in different layouts). It is therefore
+/// strongly recommended that this macro is only used when
+/// [the `repr` attribute](https://doc.rust-lang.org/nomicon/other-reprs.html)
+/// is used to force a guaranteed layout.
+///
+/// Maintaining soundness when using this macro is delicate. In particular,
+/// changing the contents of the source file or the definition of the target
+/// type at all will often silently result in undefined behaviour.
+#[macro_export]
+macro_rules! include_unsafe {
+    ($file:expr) => {{
+        const fn typecheck<T>(src: T) -> T {
+            src
+        }
+
+        typecheck(unsafe { ::core::mem::transmute(*::core::include_bytes!($file)) })
+    }};
+}
+
+/// Include data from a file as static data, consisting of a slice of
+/// [`bytemuck::Pod`] types.
+///
+/// For any type `T: bytemuck::Pod`, `include_slice!(T, path)` will return
+/// a `&'static [T]` slice containing the contents of the file at `path`.
+///
+/// A compiler error will be thrown source file cannot fit evenly into a `&[T]`
+/// slice. That is, if the file size is not divisible by
+/// [`size_of::<T>()`][core::mem::size_of]. The path is interpreted by
+/// [`core::include_bytes`] and is host-platform-specific.
+///
+/// While `include_slice!(u8, path)` is supported, [`core::include_bytes`]
+/// should be preferred in almost every case as it is a compiler built-in.
+///
+/// # Why do I have to specify the type twice?
+///
+/// In order to ensure alignment, these macros internally create a static value
+/// with the same alignment as the target type, which the compiler copies the
+/// data into at compile-time. Since this is a static value, the type used for
+/// alignment must be explicitly specified and cannot be inferred.
 ///
 /// # Example
 ///
 /// ```rust
-/// use include_data::include_ints;
-///
-/// static DATA_U32: &[u32] = include_ints!(u32, "../tests/test_data/binary_32");
+/// # use include_data::include_slice;
+/// static DATA_U32: &[u32] = include_slice!(u32, "../tests/test_data/binary_32");
 /// ```
+///
+/// # Safety
+///
+/// This macro is safe. However, if used on a custom type, that type must
+/// implement [`bytemuck::Pod`]. Implementing that trait has very struct safety
+/// requirements which must be observed.
 #[macro_export]
-macro_rules! include_ints {
-    ($int_ty:ty, $file:expr $(,)?) => {{
-        const INT_SIZE: usize = ::core::mem::size_of::<$int_ty>();
+macro_rules! include_slice {
+    ($target_ty:ty, $file:expr $(,)?) => {{
+        const SIZE: usize = ::core::mem::size_of::<$target_ty>();
 
-        static ALIGNED: &$crate::AlignedAs<$int_ty, [u8]> = &$crate::AlignedAs {
+        static ALIGNED: &$crate::AlignedAs<$target_ty, [u8]> = &$crate::AlignedAs {
             _align: [],
             bytes: *::core::include_bytes!($file),
         };
 
         let byte_slice: &[u8] = &ALIGNED.bytes;
 
-        let _requires_int: $int_ty = 0;
         assert!(
-            byte_slice.len() % INT_SIZE == 0,
-            "Included file size is not divisible by int size",
+            byte_slice.len() % SIZE == 0,
+            "Included file size is not divisible by target type size",
         );
 
-        let out_slice: &'static [$int_ty] = unsafe {
-            ::core::slice::from_raw_parts(byte_slice.as_ptr().cast(), byte_slice.len() / INT_SIZE)
+        let out_slice: &'static [$target_ty] = unsafe {
+            ::core::slice::from_raw_parts(byte_slice.as_ptr().cast(), byte_slice.len() / SIZE)
         };
 
         out_slice
     }};
 }
 
-/// Alias of [`include_ints(u16, path)`](include_ints). Returns a `&'static [u16]`.
+/// Alias of [`include_slice(u8, path)`](include_slice). Returns a `&'static [u8]`.
+///
+/// Included only for completeness, for almost every case [`core::include_bytes`]
+/// should be prefered as it is a compiler built-in.
+#[macro_export]
+macro_rules! include_u8 {
+    ($file:expr $(,)?) => {
+        $crate::include_slice!(u16, $file)
+    };
+}
+
+/// Alias of [`include_slice(u16, path)`](include_slice). Returns a `&'static [u16]`.
 #[macro_export]
 macro_rules! include_u16 {
     ($file:expr $(,)?) => {
-        $crate::include_ints!(u16, $file)
+        $crate::include_slice!(u16, $file)
     };
 }
 
-/// Alias of [`include_ints(u32, path)`](include_ints). Returns a `&'static [u32]`.
+/// Alias of [`include_slice(u32, path)`](include_slice). Returns a `&'static [u32]`.
 #[macro_export]
 macro_rules! include_u32 {
     ($file:expr $(,)?) => {
-        $crate::include_ints!(u32, $file)
+        $crate::include_slice!(u32, $file)
     };
 }
 
-/// Alias of [`include_ints(u64, path)`](include_ints). Returns a `&'static [u64]`.
+/// Alias of [`include_slice(u64, path)`](include_slice). Returns a `&'static [u64]`.
 #[macro_export]
 macro_rules! include_u64 {
     ($file:expr $(,)?) => {
-        $crate::include_ints!(u64, $file)
+        $crate::include_slice!(u64, $file)
     };
 }
 
-/// Alias of [`include_ints(u128, path)`](include_ints). Returns a `&'static [u128]`.
+/// Alias of [`include_slice(u128, path)`](include_slice). Returns a `&'static [u128]`.
 #[macro_export]
 macro_rules! include_u128 {
     ($file:expr $(,)?) => {
-        $crate::include_ints!(u128, $file)
+        $crate::include_slice!(u128, $file)
     };
 }
 
-/// Alias of [`include_ints(i8, path)`](include_ints). Returns a `&'static [i8]`.
+/// Alias of [`include_slice(usize, path)`](include_slice). Returns a `&'static [usize]`.
+#[macro_export]
+macro_rules! include_usize {
+    ($file:expr $(,)?) => {
+        $crate::include_slice!(usize, $file)
+    };
+}
+
+/// Alias of [`include_slice(i8, path)`](include_slice). Returns a `&'static [i8]`.
 #[macro_export]
 macro_rules! include_i8 {
     ($file:expr $(,)?) => {
-        $crate::include_ints!(i8, $file)
+        $crate::include_slice!(i8, $file)
     };
 }
 
-/// Alias of [`include_ints(i16, path)`](include_ints). Returns a `&'static [i16]`.
+/// Alias of [`include_slice(i16, path)`](include_slice). Returns a `&'static [i16]`.
 #[macro_export]
 macro_rules! include_i16 {
     ($file:expr $(,)?) => {
-        $crate::include_ints!(i16, $file)
+        $crate::include_slice!(i16, $file)
     };
 }
 
-/// Alias of [`include_ints(i32, path)`](include_ints). Returns a `&'static [i32]`.
+/// Alias of [`include_slice(i32, path)`](include_slice). Returns a `&'static [i32]`.
 #[macro_export]
 macro_rules! include_i32 {
     ($file:expr $(,)?) => {
-        $crate::include_ints!(i32, $file)
+        $crate::include_slice!(i32, $file)
     };
 }
 
-/// Alias of [`include_ints(i64, path)`](include_ints). Returns a `&'static [i64]`.
+/// Alias of [`include_slice(i64, path)`](include_slice). Returns a `&'static [i64]`.
 #[macro_export]
 macro_rules! include_i64 {
     ($file:expr $(,)?) => {
-        $crate::include_ints!(i64, $file)
+        $crate::include_slice!(i64, $file)
     };
 }
 
-/// Alias of [`include_ints(i128, path)`](include_ints). Returns a `&'static [i128]`.
+/// Alias of [`include_slice(i128, path)`](include_slice). Returns a `&'static [i128]`.
 #[macro_export]
 macro_rules! include_i128 {
     ($file:expr $(,)?) => {
-        $crate::include_ints!(i128, $file)
+        $crate::include_slice!(i128, $file)
     };
 }
 
-/// Includes a file as a static reference to a slice of any primitive floating
-/// point values (`f32` or `f64`).
-///
-/// For any primitive floating point type `T`, `include_floats(T, path)` will
-/// return a `&'static [T]` slice containing the contents of the file at `path`.
-/// This is guaranteed to be properly aligned.
-///
-/// Will throw a compiler error if the included file will not fit into a
-/// `&[T]` slice. That is, if the file size is not divisible by
-/// `size_of::<T>()`. Since all bit patterns are valid for all floating point
-/// types, this macro is always safe due to this size check.
-///
-/// The interpretation of the file will depend on endianness. This macro simply
-/// casts a pointer to `[u8]` to a pointer to `[$float_ty]`.
-///
-/// Uses `std::include_bytes` and therefore has the same portability limitations
-/// on the path.
-///
-/// # Example
-///
-/// ```rust
-/// use include_data::include_floats;
-///
-/// static DATA_F64: &[f64] = include_floats!(f64, "../tests/test_data/binary_64");
-/// ```
+/// Alias of [`include_slice(isize, path)`](include_slice). Returns a `&'static [isize]`.
 #[macro_export]
-macro_rules! include_floats {
-    ($float_ty:ty, $file:expr $(,)?) => {{
-        const FLOAT_SIZE: usize = ::core::mem::size_of::<$float_ty>();
-
-        static ALIGNED: &$crate::AlignedAs<$float_ty, [u8]> = &$crate::AlignedAs {
-            _align: [],
-            bytes: *::core::include_bytes!($file),
-        };
-
-        let byte_slice: &[u8] = &ALIGNED.bytes;
-
-        let _requires_float: $float_ty = 0.0;
-        assert!(
-            byte_slice.len() % FLOAT_SIZE == 0,
-            "Included file size is not divisible by int size",
-        );
-
-        let out_slice: &'static [$float_ty] = unsafe {
-            ::core::slice::from_raw_parts(byte_slice.as_ptr().cast(), byte_slice.len() / FLOAT_SIZE)
-        };
-
-        out_slice
-    }};
+macro_rules! include_isize {
+    ($file:expr $(,)?) => {
+        $crate::include_slice!(isize, $file)
+    };
 }
 
-/// Alias of [`include_floats(f32, path)`](include_floats)
+/// Alias of [`include_slice(f32, path)`](include_slice). Returns a `&'static [f32]`.
 #[macro_export]
 macro_rules! include_f32 {
     ($file:expr $(,)?) => {
-        $crate::include_floats!(f32, $file)
+        $crate::include_slice!(f32, $file)
     };
 }
 
-/// Alias of [`include_floats(f64, path)`](include_floats)
+/// Alias of [`include_slice(f64, path)`](include_slice). Returns a `&'static [f64]`.
 #[macro_export]
 macro_rules! include_f64 {
     ($file:expr $(,)?) => {
-        $crate::include_floats!(f64, $file)
+        $crate::include_slice!(f64, $file)
     };
 }
 
 /// Force alignment of the `bytes` member to match that of type T.
-/// `Bytes` is simply `[u8]` but handles that it is unsized.
+/// `B` is simply `[u8]` but handles that it is unsized.
 #[doc(hidden)]
 #[repr(C)]
-pub struct AlignedAs<T, Bytes: ?Sized> {
+pub struct AlignedAs<T: bytemuck::Pod, B: Bytes + ?Sized> {
     pub _align: [T; 0],
-    pub bytes: Bytes,
+    pub bytes: B,
 }
+
+#[doc(hidden)]
+pub trait Bytes {}
+
+impl Bytes for [u8] {}
+
+impl<const N: usize> Bytes for [u8; N] {}
