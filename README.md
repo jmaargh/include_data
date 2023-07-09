@@ -17,8 +17,9 @@ don't want to deal with loading it from the filesystem and distributing it
 as a separate file.
 
 The Rust standard library (and core library) contains
-[`include_bytes`][core::include_bytes] for this purpose. This macro will
-give you a static reference to a binary array containing the data from a
+[`include_bytes`](https://doc.rust-lang.org/stable/core/macro.include_bytes.html)
+for this purpose. This macro will give you a static reference to a binary array
+containing the data from a
 file: that is, a `&'static [u8; N]`.
 
 However, if you want to use your static data, you often want it to be of a
@@ -27,14 +28,15 @@ included file is a sequence of `f64`s, or a UTF-32 file, or of some
 custom type. This crate provides macros for typed compile-time data
 includes. This is provided by two main macros:
 
-- [`include_data`] - outputs any type which is sound
-- [`include_slice`] - outputs a `&'static [T]` slice for any `T` for which
-                      this is sound
+- `include_data` - outputs any type which is sound
+- `include_slice` - outputs a `&'static [T]` slice for any `T` for which
+                    this is sound
 
  ## Usage
 
  This library will work out-of-the-box with any type that implements
- [`bytemuck::Pod`]. This includes:
+ [`bytemuck::Pod`](https://docs.rs/bytemuck/1.13.1/bytemuck/derive.Pod.html).
+ This includes:
 
  - Primitive numerical types (`u16`, `i32`, `f64`, etc.)
  - Arrays of primitive numerical types (e.g. `[f32; N]`)
@@ -55,8 +57,9 @@ includes. This is provided by two main macros:
  ## Usage with custom types
 
  You can include data in any custom type you like. The best way of doing this
- is if your custom type satisfies the requirements for [`bytemuck::Pod`],
- in which case you can simply use [`include_data`].
+ is if your custom type satisfies the requirements for
+ [`bytemuck::Pod`](https://docs.rs/bytemuck/1.13.1/bytemuck/derive.Pod.html),
+ in which case you can simply use `include_data`.
 
  ```rust
  #[repr(C)]
@@ -74,7 +77,7 @@ includes. This is provided by two main macros:
  ```
 
  Alternatively, if your type cannot implement `bytemuck::Pod` (especially
- if it is a foreign type over which you have no control), [`include_unsafe`]
+ if it is a foreign type over which you have no control), `include_unsafe`
  can be used. In this case, you must guarantee that the file included is
  valid for the target type. This may depend on host platform, compiler
  version, and compiler profile (amongst other things): recall that Rust does
@@ -95,13 +98,13 @@ includes. This is provided by two main macros:
 
  ## Safety
 
- All macros exported by this crate are safe, except [`include_unsafe`]
+ All macros exported by this crate are safe, except `include_unsafe`
  (assuming, of course, that implementations of `bytemuck::Pod` are sound). If
  the input file size does not match the target type (or is not divisible by
  it, in the case of slices) or the file cannot be read, compilation will
  fail.
 
- [`include_unsafe`] is **very** unsafe and should be used with great care.
+ `include_unsafe` is **very** unsafe and should be used with great care.
  See the linked documentation for full details.
 
  ## MSRV
