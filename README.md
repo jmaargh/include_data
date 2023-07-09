@@ -1,5 +1,7 @@
 # include_data - Include typed data directly in your executable
 
+This crate is `no_std` and also no-`alloc`.
+
 ## Stability
 
 While this crate is pre-1.0 you should consider both the API and semantics
