@@ -1,9 +1,16 @@
 [package]
 name = "include_data"
+description = "Include typed data directly in your executable"
+authors = ["jmaargh <https://github.com/jmaargh>"]
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-license-file = "LICENSE.MIT"
+homepage = "https://github.com/jmaargh/include_data"
+repository = "https://github.com/jmaargh/include_data"
+reamde = "README.md"
+keywords = ["bytes", "data", "include", "casting", "static"]
+categories = ["encoding", "no-std", "no-std::no-alloc", "embedded"]
+exclude = ["/wip", "tests/test_data/generate.bash"]
 
 [dependencies.bytemuck]
 version = "1"
