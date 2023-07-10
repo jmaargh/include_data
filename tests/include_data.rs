@@ -29,7 +29,7 @@ fn include_custom() {
     #[derive(Copy, Clone)]
     struct Foo {
         integer: u16,
-        pair: (u8, u8),
+        pair: [u8; 2],
     }
 
     // Safety: the type `Foo` has been checked to satisfy all requirements of
@@ -40,7 +40,7 @@ fn include_custom() {
     static FOO_DATA: Foo = include_data!("../tests/test_data/binary_4");
 
     assert_eq!(FOO_DATA.integer, 0x0100);
-    assert_eq!(FOO_DATA.pair, (0x02, 0x03));
+    assert_eq!(FOO_DATA.pair, [0x02, 0x03]);
 }
 
 #[test]
@@ -60,7 +60,7 @@ fn const_custom() {
     #[derive(Copy, Clone)]
     struct Foo {
         integer: u16,
-        pair: (u8, u8),
+        pair: [u8; 2],
     }
 
     // Safety: the type `Foo` has been checked to satisfy all requirements of
@@ -71,7 +71,7 @@ fn const_custom() {
     const FOO_DATA: Foo = include_data!("../tests/test_data/binary_4");
 
     assert_eq!(FOO_DATA.integer, 0x0100);
-    assert_eq!(FOO_DATA.pair, (0x02, 0x03));
+    assert_eq!(FOO_DATA.pair, [0x02, 0x03]);
 }
 
 #[test]

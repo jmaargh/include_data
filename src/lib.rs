@@ -30,7 +30,7 @@
 //! #[derive(Copy, Clone)]
 //! struct Foo {
 //!     integer: u16,
-//!     pair: (u8, u8),
+//!     pair: [u8; 2],
 //! }
 //!
 //! // Safety: the type `Foo` has been checked to satisfy all requirements of
