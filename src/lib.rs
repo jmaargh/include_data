@@ -220,7 +220,7 @@ macro_rules! include_slice {
 #[macro_export]
 macro_rules! include_u8 {
     ($file:expr $(,)?) => {
-        $crate::include_slice!(u16, $file)
+        $crate::include_slice!(u8, $file)
     };
 }
 
