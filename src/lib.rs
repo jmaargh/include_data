@@ -218,7 +218,7 @@ macro_rules! include_slice {
 /// Included only for completeness, for almost every case [`core::include_bytes`]
 /// should be prefered as it is a compiler built-in.
 #[macro_export]
-macro_rules! include_u8 {
+macro_rules! include_u8s {
     ($file:expr $(,)?) => {
         $crate::include_slice!(u8, $file)
     };
@@ -226,7 +226,7 @@ macro_rules! include_u8 {
 
 /// Alias of [`include_slice(u16, path)`](include_slice). Returns a `&'static [u16]`.
 #[macro_export]
-macro_rules! include_u16 {
+macro_rules! include_u16s {
     ($file:expr $(,)?) => {
         $crate::include_slice!(u16, $file)
     };
@@ -234,7 +234,7 @@ macro_rules! include_u16 {
 
 /// Alias of [`include_slice(u32, path)`](include_slice). Returns a `&'static [u32]`.
 #[macro_export]
-macro_rules! include_u32 {
+macro_rules! include_u32s {
     ($file:expr $(,)?) => {
         $crate::include_slice!(u32, $file)
     };
@@ -242,7 +242,7 @@ macro_rules! include_u32 {
 
 /// Alias of [`include_slice(u64, path)`](include_slice). Returns a `&'static [u64]`.
 #[macro_export]
-macro_rules! include_u64 {
+macro_rules! include_u64s {
     ($file:expr $(,)?) => {
         $crate::include_slice!(u64, $file)
     };
@@ -250,7 +250,7 @@ macro_rules! include_u64 {
 
 /// Alias of [`include_slice(u128, path)`](include_slice). Returns a `&'static [u128]`.
 #[macro_export]
-macro_rules! include_u128 {
+macro_rules! include_u128s {
     ($file:expr $(,)?) => {
         $crate::include_slice!(u128, $file)
     };
@@ -258,7 +258,7 @@ macro_rules! include_u128 {
 
 /// Alias of [`include_slice(usize, path)`](include_slice). Returns a `&'static [usize]`.
 #[macro_export]
-macro_rules! include_usize {
+macro_rules! include_usizes {
     ($file:expr $(,)?) => {
         $crate::include_slice!(usize, $file)
     };
@@ -266,7 +266,7 @@ macro_rules! include_usize {
 
 /// Alias of [`include_slice(i8, path)`](include_slice). Returns a `&'static [i8]`.
 #[macro_export]
-macro_rules! include_i8 {
+macro_rules! include_i8s {
     ($file:expr $(,)?) => {
         $crate::include_slice!(i8, $file)
     };
@@ -274,7 +274,7 @@ macro_rules! include_i8 {
 
 /// Alias of [`include_slice(i16, path)`](include_slice). Returns a `&'static [i16]`.
 #[macro_export]
-macro_rules! include_i16 {
+macro_rules! include_i16s {
     ($file:expr $(,)?) => {
         $crate::include_slice!(i16, $file)
     };
@@ -282,7 +282,7 @@ macro_rules! include_i16 {
 
 /// Alias of [`include_slice(i32, path)`](include_slice). Returns a `&'static [i32]`.
 #[macro_export]
-macro_rules! include_i32 {
+macro_rules! include_i32s {
     ($file:expr $(,)?) => {
         $crate::include_slice!(i32, $file)
     };
@@ -290,7 +290,7 @@ macro_rules! include_i32 {
 
 /// Alias of [`include_slice(i64, path)`](include_slice). Returns a `&'static [i64]`.
 #[macro_export]
-macro_rules! include_i64 {
+macro_rules! include_i64s {
     ($file:expr $(,)?) => {
         $crate::include_slice!(i64, $file)
     };
@@ -298,7 +298,7 @@ macro_rules! include_i64 {
 
 /// Alias of [`include_slice(i128, path)`](include_slice). Returns a `&'static [i128]`.
 #[macro_export]
-macro_rules! include_i128 {
+macro_rules! include_i128s {
     ($file:expr $(,)?) => {
         $crate::include_slice!(i128, $file)
     };
@@ -306,7 +306,7 @@ macro_rules! include_i128 {
 
 /// Alias of [`include_slice(isize, path)`](include_slice). Returns a `&'static [isize]`.
 #[macro_export]
-macro_rules! include_isize {
+macro_rules! include_isizes {
     ($file:expr $(,)?) => {
         $crate::include_slice!(isize, $file)
     };
@@ -314,7 +314,7 @@ macro_rules! include_isize {
 
 /// Alias of [`include_slice(f32, path)`](include_slice). Returns a `&'static [f32]`.
 #[macro_export]
-macro_rules! include_f32 {
+macro_rules! include_f32s {
     ($file:expr $(,)?) => {
         $crate::include_slice!(f32, $file)
     };
@@ -322,7 +322,7 @@ macro_rules! include_f32 {
 
 /// Alias of [`include_slice(f64, path)`](include_slice). Returns a `&'static [f64]`.
 #[macro_export]
-macro_rules! include_f64 {
+macro_rules! include_f64s {
     ($file:expr $(,)?) => {
         $crate::include_slice!(f64, $file)
     };

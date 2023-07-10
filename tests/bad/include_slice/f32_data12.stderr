@@ -1,7 +1,7 @@
 error[E0080]: could not evaluate static initializer
  --> tests/bad/include_slice/f32_data12.rs:4:27
   |
-4 | static BYTES_12: &[f64] = include_data::include_f64!("../../test_data/binary_12");
-  |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the evaluated program panicked at 'Included file size is not divisible by target type size', $DIR/tests/bad/include_slice/f32_data12.rs:4:27
+4 | static BYTES_12: &[f64] = include_data::include_f64s!("../../test_data/binary_12");
+  |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the evaluated program panicked at 'Included file size is not divisible by target type size', $DIR/tests/bad/include_slice/f32_data12.rs:4:27
   |
-  = note: this error originates in the macro `$crate::panic::panic_2021` which comes from the expansion of the macro `include_data::include_f64` (in Nightly builds, run with -Z macro-backtrace for more info)
+  = note: this error originates in the macro `$crate::panic::panic_2021` which comes from the expansion of the macro `include_data::include_f64s` (in Nightly builds, run with -Z macro-backtrace for more info)

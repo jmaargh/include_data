@@ -53,7 +53,7 @@ Note that `include_data` can assign to `const`, while `include_slice` cannot.
 Aliases are provided for `include_slice` for primitive number types, using
 them is a matter of personal preference. For example:
 ```rust
-static SOME_TEXT: &[u32] = include_u32!("../tests/test_data/some_utf-32_file");
+static SOME_TEXT: &[u32] = include_u32s!("../tests/test_data/some_utf-32_file");
 ```
 
 ## Usage with custom types
