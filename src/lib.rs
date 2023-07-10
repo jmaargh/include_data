@@ -59,6 +59,16 @@
 //! // a valid bit-pattern for our struct, when compiled on this host.
 //! static BAR_DATA: StructWithPadding = unsafe { include_unsafe!("../tests/test_data/file_exactly_4_bytes_long") };
 //! ```
+//!
+//! ## Platform-specific behaviour
+//!
+//! The interpretation of multi-byte sequences depends on a machine's
+//! endianness. In the case of these macros, multi-byte sequences will be
+//! interpreted into types according to the endianness of the compilation
+//! target, not the compilation host machine.
+//!
+//! The interpreation of paths passed to these macros is host-platform specific
+//! and identical to that of [`core::include_bytes`].
 
 /// Include data from a file as static data in the executable, of a type that
 /// implements [`bytemuck::Pod`].
@@ -67,7 +77,9 @@
 ///
 /// A compiler error will be thrown if the source file is not the same size as
 /// the target type. The path is interpreted by [`core::include_bytes`] and is
-/// host-platform-specific.
+/// host-platform-specific. The interpretation of multi-byte sequences (e.g.,
+/// a `u32` which occupies 4 bytes) is according to the endianness of the target
+/// platform.
 ///
 /// # Example
 /// ```
@@ -103,8 +115,13 @@ macro_rules! include_data {
 /// necessary, that is often a good tradeoff rather than maintaining the
 /// soundness of using this macro. See below for full safety requirements.
 ///
+/// Can assign to both `static` and `const` variables.
+///
 /// A compiler error will be thrown if the source file is not the same size as
-/// the target type.
+/// the target type. The path is interpreted by [`core::include_bytes`] and is
+/// host-platform-specific. The interpretation of multi-byte sequences (e.g.,
+/// a `u32` which occupies 4 bytes) is according to the endianness of the target
+/// platform.
 ///
 /// # Example
 ///
@@ -164,7 +181,9 @@ macro_rules! include_unsafe {
 /// A compiler error will be thrown source file cannot fit evenly into a `&[T]`
 /// slice. That is, if the file size is not divisible by
 /// [`size_of::<T>()`][core::mem::size_of]. The path is interpreted by
-/// [`core::include_bytes`] and is host-platform-specific.
+/// [`core::include_bytes`] and is host-platform-specific. The interpretation of
+/// multi-byte sequences (e.g., a `u32` which occupies 4 bytes) is according to
+/// the endianness of the target platform.
 ///
 /// While `include_slice!(u8, path)` is supported, [`core::include_bytes`]
 /// should be preferred in almost every case as it is a compiler built-in.

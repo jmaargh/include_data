@@ -111,6 +111,17 @@ See the
 [documentation](https://docs.rs/include_data/latest/include_data/macro.include_unsafe.html)
 for full details.
 
+## Platform-specific behaviour
+
+The interpretation of multi-byte sequences depends on a machine's
+endianness. In the case of these macros, multi-byte sequences will be
+interpreted into types according to the endianness of the compilation
+target, not the compilation host machine.
+
+The interpreation of paths passed to these macros is host-platform specific
+and identical to that of
+[`include_bytes`](https://doc.rust-lang.org/stable/core/macro.include_bytes.html).
+
 ## MSRV
 
 This crate is tested against a fixed version of the Rust compiler (found
