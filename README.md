@@ -70,7 +70,7 @@ includes. This is provided by two main macros:
  #[derive(Copy, Clone)]
  struct Foo {
      integer: u16,
-     pair: (u8, u8),
+     pair: [u8; 2],
  }
 
  // Safety: the requirements for `Pod` have been manually checked.
