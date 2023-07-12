@@ -9,9 +9,10 @@
 //!                       plain-old-data `T`
 //!
 //! Soundness of types for this purpose is guaranteed via the
-//! [`Pod`][bytemuck::Pod] trait from the `bytemuck` crate. This trait can be
-//! implemented on any type and so long as that implementation is sound, then
-//! these macros are also sound.
+//! [`AnyBitPattern`][bytemuck::AnyBitPattern] trait from the `bytemuck` crate.
+//! This trait can be implemented on any type and so long as that implementation
+//! is sound, then these macros are also sound. As the name suggests, this is
+//! true exactly when the type can contain any bit pattern of the correct size.
 //!
 //! So for core library types, the following works out of the box:
 //! ```
@@ -34,9 +35,9 @@
 //! }
 //!
 //! // Safety: the type `Foo` has been checked to satisfy all requirements of
-//! // `Pod`.
+//! // `AnyBitPattern`.
 //! unsafe impl bytemuck::Zeroable for Foo {}
-//! unsafe impl bytemuck::Pod for Foo {}
+//! unsafe impl bytemuck::AnyBitPattern for Foo {}
 //!
 //! static FOO_DATA: Foo = include_data!("../tests/test_data/file_exactly_4_bytes_long");
 //! ```
@@ -74,7 +75,7 @@
 pub use bytemuck;
 
 /// Include data from a file as static data in the executable, of a type that
-/// implements [`bytemuck::Pod`].
+/// implements [`bytemuck::AnyBitPattern`].
 ///
 /// Can assign to both `static` and `const` variables.
 ///
@@ -94,18 +95,18 @@ pub use bytemuck;
 /// # Safety
 ///
 /// This macro is safe. However, if used on a custom type, that type must
-/// implement [`bytemuck::Pod`]. Implementing that trait has very struct safety
+/// implement [`bytemuck::AnyBitPattern`]. Implementing that trait has very struct safety
 /// requirements which must be observed.
 #[macro_export]
 macro_rules! include_data {
     ($file:expr) => {{
-        const fn typecheck<T: $crate::bytemuck::Pod>(src: T) -> T {
+        const fn typecheck<T: $crate::bytemuck::AnyBitPattern>(src: T) -> T {
             src
         }
 
-        // Safety: transmuting into a `Pod` type is always safe (as all bit
-        // patterns are safe). Alignment of the output type is guaranteed by
-        // `transmute`.
+        // Safety: transmuting into a `AnyBitPattern` type is always sound (as
+        // all bit patterns are valid). Alignment of the output type is
+        // guaranteed by `transmute`.
         typecheck(unsafe { ::core::mem::transmute(*::core::include_bytes!($file)) })
     }};
 }
@@ -176,9 +177,9 @@ macro_rules! include_unsafe {
 }
 
 /// Include data from a file as static data, consisting of a slice of
-/// [`bytemuck::Pod`] types.
+/// [`bytemuck::AnyBitPattern`] types.
 ///
-/// For any type `T: bytemuck::Pod`, `include_slice!(T, path)` will return
+/// For any type `T: bytemuck::AnyBitPattern`, `include_slice!(T, path)` will return
 /// a `&'static [T]` slice containing the contents of the file at `path`.
 ///
 /// A compiler error will be thrown source file cannot fit evenly into a `&[T]`
@@ -208,7 +209,7 @@ macro_rules! include_unsafe {
 /// # Safety
 ///
 /// This macro is safe. However, if used on a custom type, that type must
-/// implement [`bytemuck::Pod`]. Implementing that trait has very struct safety
+/// implement [`bytemuck::AnyBitPattern`]. Implementing that trait has very struct safety
 /// requirements which must be observed.
 #[macro_export]
 macro_rules! include_slice {
@@ -354,7 +355,7 @@ macro_rules! include_f64s {
 /// `B` is simply `[u8]` but handles that it is unsized.
 #[doc(hidden)]
 #[repr(C)]
-pub struct AlignedAs<T: bytemuck::Pod, B: Bytes + ?Sized> {
+pub struct AlignedAs<T: bytemuck::AnyBitPattern, B: Bytes + ?Sized> {
     pub _align: [T; 0],
     pub bytes: B,
 }

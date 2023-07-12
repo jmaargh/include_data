@@ -33,9 +33,9 @@ fn include_custom() {
     }
 
     // Safety: the type `Foo` has been checked to satisfy all requirements of
-    // `Pod`.
+    // `AnyBitPattern`.
     unsafe impl bytemuck::Zeroable for Foo {}
-    unsafe impl bytemuck::Pod for Foo {}
+    unsafe impl bytemuck::AnyBitPattern for Foo {}
 
     static FOO_DATA: Foo = include_data!("../tests/test_data/binary_4");
 
@@ -64,9 +64,9 @@ fn const_custom() {
     }
 
     // Safety: the type `Foo` has been checked to satisfy all requirements of
-    // `Pod`.
+    // `AnyBitPattern`.
     unsafe impl bytemuck::Zeroable for Foo {}
-    unsafe impl bytemuck::Pod for Foo {}
+    unsafe impl bytemuck::AnyBitPattern for Foo {}
 
     const FOO_DATA: Foo = include_data!("../tests/test_data/binary_4");
 

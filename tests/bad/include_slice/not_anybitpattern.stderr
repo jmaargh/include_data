@@ -1,0 +1,47 @@
+error[E0277]: the trait bound `bool: Pod` is not satisfied
+ --> tests/bad/include_slice/not_anybitpattern.rs:3:27
+  |
+3 | static NOT_ABP: &[bool] = include_data::include_slice!(bool, "../../test_data/binary_4");
+  |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Pod` is not implemented for `bool`
+  |
+  = help: the following other types implement trait `Pod`:
+            ()
+            ManuallyDrop<T>
+            Option<T>
+            PhantomData<T>
+            PhantomPinned
+            Wrapping<T>
+            [T; N]
+            __m128
+          and $N others
+  = note: required because of the requirements on the impl of `AnyBitPattern` for `bool`
+note: required by a bound in `AlignedAs`
+ --> src/lib.rs
+  |
+  | pub struct AlignedAs<T: bytemuck::AnyBitPattern, B: Bytes + ?Sized> {
+  |                         ^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `AlignedAs`
+  = note: this error originates in the macro `include_data::include_slice` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `Foo: Pod` is not satisfied
+ --> tests/bad/include_slice/not_anybitpattern.rs:9:33
+  |
+9 | static NOT_ABP_CUSTOM: &[Foo] = include_data::include_slice!(Foo, "../../test_data/binary_64");
+  |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Pod` is not implemented for `Foo`
+  |
+  = help: the following other types implement trait `Pod`:
+            ()
+            ManuallyDrop<T>
+            Option<T>
+            PhantomData<T>
+            PhantomPinned
+            Wrapping<T>
+            [T; N]
+            __m128
+          and $N others
+  = note: required because of the requirements on the impl of `AnyBitPattern` for `Foo`
+note: required by a bound in `AlignedAs`
+ --> src/lib.rs
+  |
+  | pub struct AlignedAs<T: bytemuck::AnyBitPattern, B: Bytes + ?Sized> {
+  |                         ^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `AlignedAs`
+  = note: this error originates in the macro `include_data::include_slice` (in Nightly builds, run with -Z macro-backtrace for more info)

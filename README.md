@@ -35,7 +35,7 @@ quickly with few API changes.
 ## Usage
 
 This library will work out-of-the-box with any type that implements
-[`bytemuck::Pod`](https://docs.rs/bytemuck/1.13.1/bytemuck/derive.Pod.html).
+[`bytemuck::AnyBitPattern`](https://docs.rs/bytemuck/latest/bytemuck/trait.AnyBitPattern.html).
 This includes:
 
 - Primitive numerical types (`u16`, `i32`, `f64`, etc.)
@@ -60,7 +60,7 @@ static SOME_TEXT: &[u32] = include_u32s!("../tests/test_data/some_utf-32_file");
 
 You can include data in any custom type you like. The best way of doing this
 is if your custom type satisfies the requirements for
-[`bytemuck::Pod`](https://docs.rs/bytemuck/1.13.1/bytemuck/derive.Pod.html),
+[`bytemuck::AnyBitPattern`](https://docs.rs/bytemuck/latest/bytemuck/trait.AnyBitPattern.html),
 in which case you can simply use `include_data`.
 
 ```rust
@@ -71,14 +71,14 @@ struct Foo {
     pair: [u8; 2],
 }
 
-// Safety: the requirements for `Pod` have been manually checked.
+// Safety: the requirements for `AnyBitPattern` have been manually checked.
 unsafe impl bytemuck::Zeroable for Foo {}
-unsafe impl bytemuck::Pod for Foo {}
+unsafe impl bytemuck::AnyBitPattern for Foo {}
 
 static FOO_DATA: Foo = include_data!("../tests/test_data/file_exactly_4_bytes_long");
 ```
 
-Alternatively, if your type cannot implement `bytemuck::Pod` (especially
+Alternatively, if your type cannot implement `bytemuck::AnyBitPattern` (especially
 if it is a foreign type over which you have no control), `include_unsafe`
 can be used. In this case, you must guarantee that the file included is
 valid for the target type. This may depend on host platform, compiler
@@ -101,7 +101,7 @@ static BAR_DATA: StructWithPadding = unsafe { include_unsafe!("../tests/test_dat
 ## Safety
 
 All macros exported by this crate are safe, except `include_unsafe`
-(assuming, of course, that implementations of `bytemuck::Pod` are sound). If
+(assuming, of course, that implementations of `bytemuck::AnyBitPattern` are sound). If
 the input file size does not match the target type (or is not divisible by
 it, in the case of slices) or the file cannot be read, compilation will
 fail.
