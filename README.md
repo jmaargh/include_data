@@ -124,9 +124,11 @@ and identical to that of
 
 ## MSRV
 
-This crate is tested against a fixed version of the Rust compiler (found
-in `rust-toolchain.toml`) only so that compiler errors can be consistently
-tested. However, all features relied upon were present in Rust 1.0.
+The Minimum Supported Rust Version is **1.64.0**.
+
+Note that this crate is tested against a pinned version of the compiler,
+simply because many tests check exact error messages. The current pinned
+version for testing purposes can be found in `rust-toolchain.toml`.
 
 ## Prior art
 

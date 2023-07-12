@@ -2,11 +2,7 @@ error[E0277]: the trait bound `char: Pod` is not satisfied
  --> tests/bad/include_data/not_pod.rs:3:24
   |
 3 | static NOT_POD: char = include_data::include_data!("../../test_data/binary_4");
-  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  |                        |
-  |                        the trait `Pod` is not implemented for `char`
-  |                        this tail expression is of type `char`
-  |                        required by a bound introduced by this call
+  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Pod` is not implemented for `char`
   |
   = help: the following other types implement trait `Pod`:
             ()
@@ -22,18 +18,14 @@ note: required by a bound in `NOT_POD::typecheck`
  --> tests/bad/include_data/not_pod.rs:3:24
   |
 3 | static NOT_POD: char = include_data::include_data!("../../test_data/binary_4");
-  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `typecheck`
+  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `NOT_POD::typecheck`
   = note: this error originates in the macro `include_data::include_data` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Foo: Pod` is not satisfied
  --> tests/bad/include_data/not_pod.rs:9:30
   |
 9 | static NOT_POD_CUSTOM: Foo = include_data::include_data!("../../test_data/binary_2");
-  |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  |                              |
-  |                              the trait `Pod` is not implemented for `Foo`
-  |                              this tail expression is of type `Foo`
-  |                              required by a bound introduced by this call
+  |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Pod` is not implemented for `Foo`
   |
   = help: the following other types implement trait `Pod`:
             ()
@@ -49,5 +41,5 @@ note: required by a bound in `NOT_POD_CUSTOM::typecheck`
  --> tests/bad/include_data/not_pod.rs:9:30
   |
 9 | static NOT_POD_CUSTOM: Foo = include_data::include_data!("../../test_data/binary_2");
-  |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `typecheck`
+  |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `NOT_POD_CUSTOM::typecheck`
   = note: this error originates in the macro `include_data::include_data` (in Nightly builds, run with -Z macro-backtrace for more info)
