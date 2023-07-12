@@ -70,6 +70,9 @@
 //! The interpreation of paths passed to these macros is host-platform specific
 //! and identical to that of [`core::include_bytes`].
 
+#[doc(hidden)]
+pub use bytemuck;
+
 /// Include data from a file as static data in the executable, of a type that
 /// implements [`bytemuck::Pod`].
 ///
@@ -96,7 +99,7 @@
 #[macro_export]
 macro_rules! include_data {
     ($file:expr) => {{
-        const fn typecheck<T: ::bytemuck::Pod>(src: T) -> T {
+        const fn typecheck<T: $crate::bytemuck::Pod>(src: T) -> T {
             src
         }
 
