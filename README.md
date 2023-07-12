@@ -32,7 +32,7 @@ This crate is `no_std` and also no-`alloc`.
 
 ## Stability
 
-While this crate is pre-1.0 you should consider both the API and semantics
+While this crate is pre-1.0 both the API and semantics should be considered
 unstable. However, this is simply to allow thorough community-review of the
 soundness of implementation. I hope that a 1.0 release will come relatively
 quickly with few API changes.
