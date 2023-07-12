@@ -1,5 +1,7 @@
 # include_data - Include typed data directly in your executable
 
+![Static Badge](https://img.shields.io/badge/jmaargh%2Finclude_data-8da0cb?style=flat-square&logo=github&label=github&link=https%3A%2F%2Fgithub.com%2Fjmaargh%2Finclude_data)
+
 Sometimes, you want to include data directly in your executable file, but
 you don't want to translate that data into Rust code that does the `static`
 initialization. This is very useful in embedded contexts, or if you have
