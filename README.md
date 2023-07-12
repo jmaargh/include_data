@@ -1,6 +1,9 @@
 # include_data - Include typed data directly in your executable
 
-![Static Badge](https://img.shields.io/badge/jmaargh%2Finclude_data-8da0cb?style=flat-square&logo=github&label=github&link=https%3A%2F%2Fgithub.com%2Fjmaargh%2Finclude_data)
+[![Static Badge](https://img.shields.io/badge/jmaargh%2Finclude__data-8da0cb?style=flat-square&logo=github&label=github&link=https%3A%2F%2Fgithub.com%2Fjmaargh%2Finclude_data)](https://github.com/jmaargh/include_data)
+[![Static Badge](https://img.shields.io/badge/include__data-cd961d?style=flat-square&logo=docsdotrs&label=docs.rs&link=https%3A%2F%2Fdocs.rs%2Finclude_data)
+](https://docs.rs/include_data)
+[![Crates.io](https://img.shields.io/crates/v/include_data?style=flat-square&logo=rust&color=264323)](https://crates.io/crates/include_data)
 
 Sometimes, you want to include data directly in your executable file, but
 you don't want to translate that data into Rust code that does the `static`
