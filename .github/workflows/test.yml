@@ -2,9 +2,8 @@ name: Test
 
 on:
   push:
-    branches: [ ${{ github.event.repository.default_branch }} ]
+    branches: [ main ]
   pull_request:
-    branches: [ ${{ github.event.repository.default_branch }} ]
   workflow_dispatch:
 
 env:
