@@ -36,3 +36,9 @@ fn include_as_const() {
         assert_eq!(MY_U32, 0x00_01_02_03);
     }
 }
+
+#[test]
+fn bad_use() {
+    let t = trybuild::TestCases::new();
+    t.compile_fail("tests/bad/include_unsafe/*.rs");
+}
