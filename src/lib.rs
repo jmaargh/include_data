@@ -171,7 +171,7 @@ macro_rules! include_unsafe {
             src
         }
 
-        typecheck(unsafe { ::core::mem::transmute(*::core::include_bytes!($file)) })
+        typecheck(::core::mem::transmute(*::core::include_bytes!($file)))
     }};
 }
 
