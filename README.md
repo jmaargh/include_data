@@ -1,8 +1,7 @@
 # include_data - Include typed data directly in your executable
 
 [![github badge](https://img.shields.io/badge/jmaargh%2Finclude__data-8da0cb?style=flat-square&logo=github&label=github&link=https%3A%2F%2Fgithub.com%2Fjmaargh%2Finclude_data)](https://github.com/jmaargh/include_data)
-[![docs.rs badge](https://img.shields.io/badge/include__data-cd961d?style=flat-square&logo=docsdotrs&label=docs.rs&link=https%3A%2F%2Fdocs.rs%2Finclude_data)
-](https://docs.rs/include_data)
+[![docs.rs badge](https://img.shields.io/docsrs/include_data/latest?style=flat-square&label=docs.rs&link=https%3A%2F%2Fdocs.rs%2Finclude_data%2F)](https://docs.rs/include_data)
 [![Crates.io badge](https://img.shields.io/crates/v/include_data?style=flat-square&logo=rust&color=264323)](https://crates.io/crates/include_data)
 ![licence badge](https://img.shields.io/crates/l/include_data?style=flat-square&logo=opensourceinitiative&logoColor=ffffff)
 
