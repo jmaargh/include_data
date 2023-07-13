@@ -1,10 +1,10 @@
-error[E0277]: the trait bound `bool: Pod` is ::AnyBitPattern::AnyBitPatternied
+error[E0277]: the trait bound `bool: Pod` is not satisfied
  --> tests/bad/include_slice/bool.rs:4:33
   |
 4 | static BYTES_32_bool: &[bool] = include_data::include_slice!(bool, "../../test_data/binary_32");
-  |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Pod` is ::AnyBitPattern::AnyBitPatternented for `bool`
+  |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Pod` is not implemented for `bool`
   |
-  = help: the following other types implement trait `Pod`:::AnyBitPattern::AnyBitPattern
+  = help: the following other types implement trait `Pod`:
             ()
             ManuallyDrop<T>
             Option<T>
@@ -14,9 +14,10 @@ error[E0277]: the trait bound `bool: Pod` is ::AnyBitPattern::AnyBitPatternied
             [T; N]
             __m128
           and $N others
+  = note: required because of the requirements on the impl of `AnyBitPattern` for `bool`
 note: required by a bound in `AlignedAs`
  --> src/lib.rs
   |
   | pub struct AlignedAs<T: bytemuck::AnyBitPattern, B: Bytes + ?Sized> {
-  |                         ^^^^^^^^^^^^^ required by this bound in `AlignedAs`
+  |                         ^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `AlignedAs`
   = note: this error originates in the macro `include_data::include_slice` (in Nightly builds, run with -Z macro-backtrace for more info)
