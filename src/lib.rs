@@ -1,7 +1,7 @@
 #![no_std]
 #![allow(clippy::modulo_one)]
 
-//! # include_data - Include typed data directly in your executable
+//! # `include_data` - Include typed data directly in your executable
 //!
 //! The primary API is provided by two macros:
 //! - [`include_data`] - include static data as any plain-old-data type
