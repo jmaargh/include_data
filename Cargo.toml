@@ -10,7 +10,7 @@ repository = "https://github.com/jmaargh/include_data"
 reamde = "README.md"
 keywords = ["bytes", "data", "include", "casting", "static"]
 categories = ["encoding", "no-std", "no-std::no-alloc", "embedded"]
-exclude = ["/wip", "tests/test_data/generate.bash"]
+exclude = [".gitignore", ".github", "tests/test_data/generate.bash"]
 
 [dependencies.bytemuck]
 version = "1"
