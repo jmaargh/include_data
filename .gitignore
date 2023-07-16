@@ -1,3 +1,4 @@
 /target/
 
-/Cargo.lock
+# N.B. Cargo.lock requried for fixed error message testing
+!/Cargo.lock
