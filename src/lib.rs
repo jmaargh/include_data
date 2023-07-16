@@ -168,11 +168,7 @@ macro_rules! include_data {
 #[macro_export]
 macro_rules! include_unsafe {
     ($file:expr) => {{
-        const fn typecheck<T>(src: T) -> T {
-            src
-        }
-
-        typecheck(::core::mem::transmute(*::core::include_bytes!($file)))
+        ::core::convert::identity(::core::mem::transmute(*::core::include_bytes!($file)))
     }};
 }
 
