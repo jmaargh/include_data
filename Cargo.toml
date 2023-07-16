@@ -11,6 +11,7 @@ reamde = "README.md"
 keywords = ["bytes", "data", "include", "casting", "static"]
 categories = ["encoding", "no-std", "no-std::no-alloc", "embedded"]
 exclude = [".gitignore", ".github", "tests/test_data/generate.bash"]
+include = ["Cargo.lock"] # Required for trybuild tests to be repeatable
 
 [dependencies.bytemuck]
 version = "1"
