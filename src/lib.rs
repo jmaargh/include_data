@@ -70,6 +70,27 @@
 //!
 //! The interpreation of paths passed to these macros is host-platform specific
 //! and identical to that of [`core::include_bytes`].
+//!
+//! ## Alternatives
+//!
+//! Depending on what you're trying to achieve, this crate might not be the best
+//! choice. Here are a few alternatives which may be more appropriate depending
+//! on the situation:
+//!
+//! - [`static_toml`](https://crates.io/crates/static-toml): if the data you're
+//!   including fits within a `toml` spec, this crate parses it at compile time
+//!   and includes the result as static, type-safe, data.
+//! - [`const_gen`](https://crates.io/crates/const-gen): tool that helps you use
+//!   `build.rs` to do compile-time code generation of constant values. More
+//!   complicated and verbose than `include_data`, but also more flexible.
+//! - The standard library has [`OnceLock`](https://doc.rust-lang.org/stable/std/sync/struct.OnceLock.html)
+//!   and [`LazyLock`](https://doc.rust-lang.org/stable/std/sync/struct.LazyLock.html)
+//!   both of which can be used to assign complex values to `static`s, but do so
+//!   at runtime and with a non-zero runtime cost. If your type needs runtime
+//!   construction, these are very good chocies but `include_data` is cheaper
+//!   for "simple typed data" values.
+//!
+//! If you know of any others, please drop an issue or open a PR.
 
 #[doc(hidden)]
 pub use bytemuck;

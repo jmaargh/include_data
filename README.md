@@ -30,13 +30,6 @@ includes. This is provided by two main macros:
 
 This crate is `no_std` and also no-`alloc`.
 
-## Stability
-
-While this crate is pre-1.0 both the API and semantics should be considered
-unstable. However, this is simply to allow thorough community-review of the
-soundness of implementation. I hope that a 1.0 release will come relatively
-quickly with few API changes.
-
 ## Usage
 
 This library will work out-of-the-box with any type that implements
