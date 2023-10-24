@@ -95,8 +95,8 @@ pub use bytemuck;
 /// # Safety
 ///
 /// This macro is safe. However, if used on a custom type, that type must
-/// implement [`bytemuck::AnyBitPattern`]. Implementing that trait has very struct safety
-/// requirements which must be observed.
+/// implement [`bytemuck::AnyBitPattern`]. Implementing that trait has very
+/// strict safety requirements which must be observed.
 #[macro_export]
 macro_rules! include_data {
     ($file:expr) => {{
@@ -168,11 +168,7 @@ macro_rules! include_data {
 #[macro_export]
 macro_rules! include_unsafe {
     ($file:expr) => {{
-        const fn typecheck<T>(src: T) -> T {
-            src
-        }
-
-        typecheck(::core::mem::transmute(*::core::include_bytes!($file)))
+        ::core::convert::identity(::core::mem::transmute(*::core::include_bytes!($file)))
     }};
 }
 
