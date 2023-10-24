@@ -2,7 +2,7 @@
 name = "include_data"
 description = "Include typed data directly in your executable"
 authors = ["jmaargh <https://github.com/jmaargh>"]
-version = "0.2.0"
+version = "1.0.0"
 edition = "2021"
 license = "MIT"
 homepage = "https://github.com/jmaargh/include_data"

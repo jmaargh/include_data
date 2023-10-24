@@ -25,7 +25,7 @@ checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
 
 [[package]]
 name = "include_data"
-version = "0.2.0"
+version = "1.0.0"
 dependencies = [
  "bytemuck",
  "trybuild",
