@@ -2,7 +2,11 @@ error[E0277]: the trait bound `char: Pod` is not satisfied
  --> tests/bad/include_data/not_anybitpattern.rs:3:24
   |
 3 | static NOT_ABP: char = include_data::include_data!("../../test_data/binary_4");
-  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Pod` is not implemented for `char`
+  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |                        |
+  |                        the trait `Pod` is not implemented for `char`
+  |                        this tail expression is of type `char`
+  |                        required by a bound introduced by this call
   |
   = help: the following other types implement trait `Pod`:
             ()
@@ -14,19 +18,23 @@ error[E0277]: the trait bound `char: Pod` is not satisfied
             [T; N]
             __m128
           and $N others
-  = note: required because of the requirements on the impl of `AnyBitPattern` for `char`
+  = note: required for `char` to implement `AnyBitPattern`
 note: required by a bound in `NOT_ABP::typecheck`
  --> tests/bad/include_data/not_anybitpattern.rs:3:24
   |
 3 | static NOT_ABP: char = include_data::include_data!("../../test_data/binary_4");
-  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `NOT_ABP::typecheck`
+  |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `typecheck`
   = note: this error originates in the macro `include_data::include_data` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error[E0277]: the trait bound `Foo: Pod` is not satisfied
  --> tests/bad/include_data/not_anybitpattern.rs:9:30
   |
 9 | static NOT_ABP_CUSTOM: Foo = include_data::include_data!("../../test_data/binary_2");
-  |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Pod` is not implemented for `Foo`
+  |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |                              |
+  |                              the trait `Pod` is not implemented for `Foo`
+  |                              this tail expression is of type `Foo`
+  |                              required by a bound introduced by this call
   |
   = help: the following other types implement trait `Pod`:
             ()
@@ -38,10 +46,10 @@ error[E0277]: the trait bound `Foo: Pod` is not satisfied
             [T; N]
             __m128
           and $N others
-  = note: required because of the requirements on the impl of `AnyBitPattern` for `Foo`
+  = note: required for `Foo` to implement `AnyBitPattern`
 note: required by a bound in `NOT_ABP_CUSTOM::typecheck`
  --> tests/bad/include_data/not_anybitpattern.rs:9:30
   |
 9 | static NOT_ABP_CUSTOM: Foo = include_data::include_data!("../../test_data/binary_2");
-  |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `NOT_ABP_CUSTOM::typecheck`
+  |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `typecheck`
   = note: this error originates in the macro `include_data::include_data` (in Nightly builds, run with -Z macro-backtrace for more info)
