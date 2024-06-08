@@ -3,18 +3,20 @@ use include_data::include_unsafe;
 #[test]
 fn with_padding() {
     #[repr(C)]
-    struct StructWithPadding {
-        byte: u8,
+    struct StructWithBools {
+        bool1: bool,
+        bool2: bool,
         two_bytes: u16,
     }
 
-    // Safety: we guarantee that the included file contains bytes which are
-    // a valid bit-pattern for our struct, when compiled on this host.
-    static BAR_DATA: StructWithPadding =
+    // Safety: we guarantee that the included file contains the bytes 0x00 and
+    // 0x01 at the start, which are both valid bool bit patterns.
+    static BAR_DATA: StructWithBools =
         unsafe { include_unsafe!("../tests/test_data/file_exactly_4_bytes_long") };
 
-    assert_eq!(core::mem::size_of::<StructWithPadding>(), 4);
-    assert_eq!(BAR_DATA.byte, 0x01);
+    assert_eq!(core::mem::size_of::<StructWithBools>(), 4);
+    assert_eq!(BAR_DATA.bool1, true);
+    assert_eq!(BAR_DATA.bool2, false);
     if cfg!(target_endian = "little") {
         assert_eq!(BAR_DATA.two_bytes, 0x0302);
     } else {

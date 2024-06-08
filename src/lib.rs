@@ -50,15 +50,16 @@
 //! docs for more details.
 //! ```
 //! # use include_data::include_unsafe;
+//! // This struct contains a `bool`, which is only valid for bit patterns of
+//! // 0x00 and 0x01, so does not satisfy `bytemuck::AnyBitPattern` and thus
+//! // requires `include_unsafe`.
 //! #[repr(C)]
-//! struct StructWithPadding {
-//!     byte: u8,
+//! struct StructWithBool {
+//!     boolean: bool,
 //!     two_bytes: u16,
 //! }
 //!
-//! // Safety: we guarantee that the included file contains bytes which are
-//! // a valid bit-pattern for our struct, when compiled on this host.
-//! static BAR_DATA: StructWithPadding = unsafe { include_unsafe!("../tests/test_data/file_exactly_4_bytes_long") };
+//! static BAR_DATA: StructWithBool = unsafe { include_unsafe!("../tests/test_data/file_exactly_4_bytes_long") };
 //! ```
 //!
 //! ## Platform-specific behaviour
@@ -131,15 +132,23 @@ macro_rules! include_data {
 ///
 /// ```
 /// # use include_data::include_unsafe;
+/// // This struct contains a `bool`, which is only valid for bit patterns of
+/// // 0x00 and 0x01, so does not satisfy `bytemuck::AnyBitPattern` and thus
+/// // requires `include_unsafe`.
 /// #[repr(C)]
-/// struct StructWithPadding {
-///     byte: u8,
+/// struct StructWithBool {
+///     boolean: bool,
 ///     two_bytes: u16,
 /// }
 ///
 /// // Safety: we guarantee that the included file contains bytes which are
 /// // a valid bit-pattern for our struct, when compiled on this host.
-/// static BAR_DATA: StructWithPadding = unsafe { include_unsafe!("../tests/test_data/file_exactly_4_bytes_long") };
+/// // This file contains bytes 0x01 0x00 0x02 0x03 in that order. The padding
+/// // byte (second byte) could be any value, but the first byte has to be
+/// // valid for `bool`.
+/// static BAR_DATA: StructWithBool = unsafe { include_unsafe!("../tests/test_data/file_exactly_4_bytes_long") };
+///
+/// # assert_eq!(BAR_DATA.boolean, true);
 /// ```
 ///
 /// # Safety

@@ -26,7 +26,7 @@ includes. This is provided by two main macros:
 
 - `include_data` - outputs any type which is sound
 - `include_slice` - outputs a `&'static [T]` slice for any `T` for which
-                    this is sound
+  this is sound
 
 This crate is `no_std` and also no-`alloc`.
 
@@ -40,6 +40,7 @@ This includes:
 - Arrays of primitive numerical types (e.g. `[f32; N]`)
 
 For example:
+
 ```rust
 static MY_INTEGER: i32 = include_data!("../tests/test_data/file_exactly_4_bytes_long");
 static SOME_TEXT: &[u32] = include_slice!(u32, "../tests/test_data/some_utf-32_file");
@@ -50,6 +51,7 @@ Note that `include_data` can assign to `const`, while `include_slice` cannot.
 
 Aliases are provided for `include_slice` for primitive number types, using
 them is a matter of personal preference. For example:
+
 ```rust
 static SOME_TEXT: &[u32] = include_u32s!("../tests/test_data/some_utf-32_file");
 ```
@@ -127,6 +129,27 @@ The Minimum Supported Rust Version is **1.64.0**.
 Note that this crate is tested against a pinned version of the compiler,
 simply because many tests check exact error messages. The current pinned
 version for testing purposes can be found in `rust-toolchain.toml`.
+
+## Alternatives
+
+Depending on what you're trying to achieve, this crate might not be the best
+choice. Here are a few alternatives which may be more appropriate depending
+on the situation:
+
+- [`static_toml`](https://crates.io/crates/static-toml): if the data you're
+  including fits within a `toml` spec, this crate parses it at compile time
+  and includes the result as static, type-safe, data.
+- [`const_gen`](https://crates.io/crates/const-gen): tool that helps you use
+  `build.rs` to do compile-time code generation of constant values. More
+  complicated and verbose than `include_data`, but also more flexible.
+- The standard library has [`OnceLock`](https://doc.rust-lang.org/stable/std/sync/struct.OnceLock.html)
+  and [`LazyLock`](https://doc.rust-lang.org/stable/std/sync/struct.LazyLock.html)
+  both of which can be used to assign complex values to `static`s, but do so
+  at runtime and with a non-zero runtime cost. If your type needs runtime
+  construction, these are very good chocies but `include_data` is cheaper
+  for "simple typed data" values.
+
+If you know of any others, please drop an issue or open a PR.
 
 ## Prior art
 
